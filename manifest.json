@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "package_id": "PKG-013",
+  "slug": "diagnostic-tree",
+  "name": "sovereign-diagnostic-tree",
+  "domain": "Expert Systems & Diagnostic Bots",
+  "version": "1.0.0",
+  "status": "PRODUCTION_READY",
+  "entrypoint": "src/core.py",
+  "cli_command": "sovereign-diagnostic-tree",
+  "microservice_port": 8791,
+  "n8n_webhook_path": "diagnostic-tree-trigger",
+  "n8n_workflow": "n8n/workflow.json",
+  "test_suite": "tests/test_solution.py",
+  "author": "Russell Alan Powers",
+  "license": "MIT"
+}
