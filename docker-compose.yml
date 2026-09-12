@@ -1,0 +1,39 @@
+version: "3.9"
+# Sovereign Diagnostic Tree — docker-compose
+# Usage: docker-compose up --build
+
+services:
+  diagnostic-tree:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: sovereign-diagnostic-tree:latest
+    container_name: sovereign-diagnostic-tree
+    restart: unless-stopped
+    ports:
+      - "8791:8791"
+    environment:
+      SBB_FAULT_TREE_PATH: ${SBB_FAULT_TREE_PATH}
+      SBB_ML_MODEL_PATH: ${SBB_ML_MODEL_PATH}
+      SBB_CONFIDENCE_THRESHOLD: ${SBB_CONFIDENCE_THRESHOLD}
+      SBB_DOMAIN: ${SBB_DOMAIN}
+      SBB_API_KEY: ${SBB_API_KEY:-change-me}
+      SBB_N8N_EVENT_BUS_URL: ${SBB_N8N_EVENT_BUS_URL:-http://host.docker.internal:5678/webhook/event-bus}
+      SERVICE_PORT: 8791
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./.data:/app/.data:rw
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8791/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    networks:
+      - sbb-platform
+
+networks:
+  sbb-platform:
+    external: true
+    name: sbb-platform-network
